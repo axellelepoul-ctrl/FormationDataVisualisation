@@ -1,0 +1,404 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+#Pour rester dans H tout le long du notebook
+knitr::opts_knit$set(root.dir = "h:/Desktop")
+```
+
+```{r}
+#Exercice 1 :
+df = read.csv ("PhD.csv", sep=",")
+
+library(ggplot2)
+library(dplyr)
+
+
+# Compter les occurrences de chaque discipline par année
+df_count <- df %>% #pour prendre en compte les résultats précédents
+  group_by(Année, Discipline) %>% #les données sont organisées en groupes où chaque groupe contient toutes les lignes ayant la même combinaison d'année et de discipline
+  summarise(Count = n()) #nouveau df qui rajoute le nombre d'occurence des disciplines et n compte les lignes
+
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_area(alpha=0.8) +
+  labs(title = "Évolution des disciplines (1985-2018)", x = "Année", y = "Nombre d'occurrences") +
+  scale_fill_manual(values = c("darkblue", "blue", "lightblue", "turquoise")) +
+  theme_minimal()
+```
+
+
+
+```{r}
+#Exercice 2 :
+
+install.packages("ggplot2")
+library(ggplot2)
+
+n <- 100 #nombre de données
+
+# Générer les données aléatoires
+df15 <- data.frame(
+  Âge = sample(18:25, n, replace = TRUE),  # Âge aléatoire entre 18 et 70
+  Note = round(runif(n, min = 0, max = 100))  # Note aléatoire entre 0 et 100
+)
+
+ggplot(df15, aes(x = Âge, y = Note)) +
+  geom_col(fill = "orange", alpha = 0.4) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid.major = element_line(color = "gray", size = 0.5),
+        panel.grid.minor = element_line(color = "lightgray", size = 0.25)) + #Paramètres des lignes de la grille
+  labs(x = "Âge", y = "Note", title = "Note moyenne par âge")
+```
+
+
+```{r}
+#Exercice 3 :
+
+library(ggplot2)
+
+n <- 100 #nombre de données
+
+# Générer les données aléatoires
+df15 <- data.frame(
+  Âge = sample(18:25, n, replace = TRUE),  # Âge aléatoire entre 18 et 70
+  Note = round(runif(n, min = 0, max = 100))  # Note aléatoire entre 0 et 100
+)
+
+ggplot(df15, aes(x = Âge, y = Note)) +
+  geom_col(fill = "orange", alpha = 0.6, width = 0.6) +
+  theme_minimal(base_size = 15) +
+  theme(
+    panel.grid.major = element_line(color = "gray", size = 0.5),
+    panel.grid.minor = element_line(color = "lightgray", size = 0.25),
+    axis.text.x = element_text(margin = margin(t = 20), angle = 45)  # Éloigner les étiquettes de l'axe des X
+  ) +
+  labs(x = "Âge", y = "Note", title = "Note moyenne par âge")
+```
+
+
+```{r}
+#Exercice 4 :
+
+#extrafonts ne marche pas sur ma version de R
+
+install.packages("showtext")
+library(showtext)
+
+font_add(family = "Times New Roman", regular = "C:\\WINDOWS\\FONTS\\TIMES.TTF") #Ajouter NR
+font_add(family = "Garamond", regular = "C:\\WINDOWS\\FONTS\\GARA.TTF") #Ajouter Garamond
+
+showtext_auto() #faire fonctionner les polices
+
+library(ggplot2)
+
+n <- 100 #nombre de données
+
+# Générer les données aléatoires
+df15 <- data.frame(
+  Âge = sample(18:25, n, replace = TRUE),  # Âge aléatoire entre 18 et 70
+  Note = round(runif(n, min = 0, max = 100))  # Note aléatoire entre 0 et 100
+)
+
+ggplot(df15, aes(x = Âge, y = Note)) +
+  geom_col(fill = "#4A919E", alpha = 0.6, width = 0.9) +
+  theme_minimal(base_size = 15) +
+  theme(
+    panel.grid.major = element_line(color = "darkgrey", size = 0.5),
+    panel.grid.minor = element_line(color = "lightgray", size = 0.25),
+    axis.text.x = element_text(margin = margin(t = 20), angle = 45, family = "Times New Roman", color = "#EBACA2", size = 15, face = "bold"), # Éloigner les étiquettes de l'axe des X
+    axis.text.y = element_text(family = "Times New Roman", color = "#EBACA2", size = 15, face = "bold"),    #changer la police
+    axis.title.x = element_text(color = "#212E53", size = 20),
+    axis.title.y = element_text(color = "#212E53", size = 20),)
+```
+
+
+```{r}
+# Tout jusqu'à la question 5 mais avec le bon graphique :)
+
+setwd("h:\\Desktop")
+df = read.csv ("h:\\Desktop\\R\\PhD.csv", sep=",")
+
+library(ggplot2)
+library(dplyr)
+
+
+# Compter les occurrences de chaque discipline par année
+df_count <- df %>% #pour prendre en compte les résultats précédents
+  group_by(Année, Discipline) %>% #les données sont organisées en groupes où chaque groupe contient toutes les lignes ayant la même combinaison d'année et de discipline
+  summarise(Count = n()) #nouveau df qui rajoute le nombre d'occurence des disciplines et n compte les lignes
+
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_area(alpha=0.8) +
+  labs(title = "Évolution des disciplines (1985-2018)", x = "Année", y = "Nombre d'occurrences") +
+  scale_fill_manual(values = c("darkblue", "blue", "lightblue", "turquoise")) +
+  theme_minimal()
+
+
+```
+
+
+
+
+```{r}
+library(ggplot2)
+
+# Supposons que df_count est votre dataframe et qu'il a les colonnes Année, Count, et Discipline.
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_bar(stat = "identity", position = "stack", alpha = 0.8) +  # Utiliser geom_bar avec position = "stack"
+  labs(title = "Évolution des disciplines (1985-2018)", 
+       x = "Année", 
+       y = "Nombre d'occurrences") +
+  # scale_y_log10() + # Décommenter pour mettre les Y à une échelle logarithmique
+  scale_fill_manual(values = c("darkblue", "blue", "lightblue", "turquoise")) +
+  theme_minimal(base_size = 15) +  # Thème minimal avec taille de base
+  theme(
+    axis.text.x = element_text(margin = margin(t = 2), angle = 45, family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.text.y = element_text(family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.title.x = element_text(color = "black", size = 20),
+    axis.title.y = element_text(color = "black", size = 20),
+    plot.title = element_text(family = "Times New Roman", face = "bold", size = 20),
+    legend.title = element_text(family = "Times New Roman", face = "bold", size = 14),
+    legend.text = element_text(family = "Times New Roman", size = 12),
+    legend.position = "right"  # Placer la légende en haut
+  )
+
+
+```
+
+
+```{r}
+#Exercice 6 :
+
+library(ggplot2)
+
+# Supposons que df_count est votre dataframe et qu'il a les colonnes Année, Count, et Discipline.
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_bar(stat = "identity", position = "stack", alpha = 0.8) +  # Utiliser geom_bar avec position = "stack"
+  labs(title = "Évolution des disciplines (1985-2018)", 
+       x = "Année", 
+       y = "Nombre d'occurrences") +
+  # scale_y_log10() + # Décommenter pour mettre les Y à une échelle logarithmique
+  scale_fill_manual(values = c("darkblue", "blue", "lightblue", "turquoise")) +
+  theme_minimal(base_size = 15) +  # Thème minimal avec taille de base
+  theme(
+    axis.text.x = element_text(margin = margin(t = 2), angle = 45, family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.text.y = element_text(family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.title.x = element_text(color = "black", size = 20),
+    axis.title.y = element_text(color = "black", size = 20),
+    plot.title = element_text(family = "Times New Roman", face = "bold", size = 20),
+    legend.title = element_text(family = "Times New Roman", face = "bold", size = 14),
+    legend.text = element_text(family = "Times New Roman", size = 12),
+    legend.position = "top"  # Placer la légende en haut
+  )
+
+```
+```{r}
+#Exercice 7 :
+
+library(ggplot2)
+
+# Supposons que df_count est votre dataframe et qu'il a les colonnes Année, Count, et Discipline.
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_bar(stat = "identity", position = "stack", alpha = 0.8) +  # Utiliser geom_bar avec position = "stack"
+  labs(title = "Évolution des disciplines (1985-2018)", 
+       x = "Année", 
+       y = "Nombre d'occurrences") +
+  # scale_y_log10() + # Décommenter pour mettre les Y à une échelle logarithmique
+  scale_fill_manual(values = c("#E3CD8B", "#5D7052", "#C18845", "#F0BE86")) +
+  theme_minimal(base_size = 15) +  # Thème minimal avec taille de base
+  theme(
+    axis.text.x = element_text(margin = margin(t = 2), angle = 45, family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.text.y = element_text(family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.title.x = element_text(color = "black", size = 20),
+    axis.title.y = element_text(color = "black", size = 20),
+    plot.title = element_text(family = "Times New Roman", face = "bold", size = 20),
+    legend.title = element_text(family = "Times New Roman", face = "bold", size = 14),
+    legend.text = element_text(family = "Times New Roman", size = 12),
+    legend.position = "right"  # Placer la légende en haut
+  )
+```
+
+```{r}
+#Exercice 8 :
+library(ggplot2)
+
+# Inverser l'ordre des niveaux de la variable Discipline
+df_count$Discipline <- factor(df_count$Discipline, levels = rev(unique(df_count$Discipline)))
+
+ggplot(df_count, aes(x = Année, y = Count, fill = Discipline)) +
+  geom_bar(stat = "identity", position = "stack", alpha = 0.8) +  # Utiliser geom_bar avec position = "stack"
+  labs(title = "Évolution des disciplines (1985-2018)", 
+       x = "Année", 
+       y = "Nombre d'occurrences") +
+  # scale_y_log10() + # Décommenter pour mettre les Y à une échelle logarithmique
+  scale_fill_manual(values = c("#E3CD8B", "#5D7052", "#C18845", "#F0BE86")) +
+  theme_minimal(base_size = 15) +  # Thème minimal avec taille de base
+  theme(
+    axis.text.x = element_text(margin = margin(t = 2), angle = 45, family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.text.y = element_text(family = "Times New Roman", color = "black", size = 15, face = "bold"),
+    axis.title.x = element_text(color = "black", size = 20),
+    axis.title.y = element_text(color = "black", size = 20),
+    plot.title = element_text(family = "Times New Roman", face = "bold", size = 20),
+    legend.title = element_text(family = "Times New Roman", face = "bold", size = 14),
+    legend.text = element_text(family = "Times New Roman", size = 12),
+    legend.position = "right"  # Placer la légende à droite
+  )
+
+
+```
+
+```{r}
+#4 Interactive graphs
+#4.1
+# Libraries
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Bubble plot
+ggplot(df_count, aes(x = Année, y = Count, color = Discipline)) +
+    geom_point(aes(size = Count), alpha = 0.7) +
+  labs(title = "Évolution des Disciplines (1985-2018)", 
+         x = "Année", 
+         y = "Nombre d'occurrences") +
+    scale_color_manual(values = c("#E3CD8B", "#5D7052", "#C18845", "#F0BE86")) +  # Choisissez vos propres couleurs
+    theme_minimal(base_size = 15)
+```
+
+
+```{r}
+```
+
+```{r}
+#Mettre en HTML
+#install.packages("htmlwidgets")
+
+# Charger les bibliothèques nécessaires
+library(ggplot2)
+library(dplyr)
+library(plotly)  # Pour les graphiques interactifs
+library(htmlwidgets)  # Pour sauvegarder en HTML
+
+# Créer le bubble plot avec ggplot2
+p <- ggplot(df_count, aes(x = Année, y = Count, color = Discipline)) +
+    geom_point(aes(size = Count), alpha = 0.7) +
+    labs(title = "Évolution des Disciplines (1985-2018)", 
+         x = "Année", 
+         y = "Nombre d'occurrences") +
+    scale_color_manual(values = c("#E3CD8B", "#5D7052", "#C18845", "#F0BE86")) +  # Choisissez vos propres couleurs
+    theme_minimal(base_size = 15)
+
+# Convertir le graphique ggplot en graphique interactif plotly
+p_plotly <- ggplotly(p)
+
+# Exporter le graphique en format HTML
+saveWidget(p_plotly, "bubble_plot.html")
+
+```
+
+
+```{r}
+#4.2
+#Code pour créer le csv nécessaire à utiliser sur flourish
+#install.packages("tidyverse")
+
+library(tidyverse)
+library(dplyr)
+
+table_annees <- df_count %>%
+  group_by(Année, Discipline) %>%
+  summarise(Nb_theses = sum(Count), .groups = 'drop')
+
+library(tidyverse)
+# Transformer le tableau en format large
+table_large <- table_annees %>%
+  pivot_wider(names_from = Année, values_from = Nb_theses, values_fill = 0)
+
+write.csv(table_large, "PhD_defenses_by_discipline.csv", row.names = FALSE)
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+
+# Exemple de df_count (remplacez cela par votre dataframe réel)
+# df_count <- data.frame(Année = rep(1985:2018, each = 4),
+#                         Count = sample(1:100, 140, replace = TRUE),
+#                         Discipline = rep(c("Biologie", "Chimie", "Physique", "Mathématiques"), times = 35))
+
+# Créer le graphique à bulles
+bubble_plot <- ggplot(df_count, aes(x = Count, y = Discipline, color = Discipline)) +
+  geom_point(aes(size = Count), alpha = 0.7) +
+  labs(title = "Évolution des Disciplines (1985-2018)", 
+       x = "Nombre d'occurrences", 
+       y = "") +
+  scale_color_manual(values = c("#E3CD8B", "#5D7052", "#C18845", "#F0BE86")) +
+  theme_minimal(base_size = 15) +
+  theme(axis.title.x = element_text(size = 14),
+        axis.text.y = element_text(size = 12),
+        plot.title = element_text(size = 16))
+
+# Convertir le graphique ggplot en graphique plotly
+bubble_plot_interactive <- ggplotly(bubble_plot)
+
+# Obtenir les années uniques
+years <- unique(df_count$Année)
+
+# Créer les étapes pour le curseur
+steps <- lapply(years, function(year) {
+  # Filtrer les données pour chaque année
+  filtered_data <- df_count %>% filter(Année == year)
+  
+  list(
+    label = as.character(year),
+    method = "restyle",
+    args = list("marker.size", list(filtered_data$Count))  # Changer la taille des marqueurs
+  )
+})
+
+# Ajouter un curseur pour sélectionner les années
+bubble_plot_interactive <- bubble_plot_interactive %>%
+  layout(
+    sliders = list(
+      list(
+        active = 0,
+        currentvalue = list(prefix = "Année: "),
+        pad = list(t = 50),
+        steps = steps
+      )
+    )
+  )
+
+# Afficher le graphique interactif
+bubble_plot_interactive
+
+
+```
+
+
+```{r}
+#install.packages(c("sf", "ggplot2", "maps"))
+
+library(sf)
+library(ggplot2)
+library(maps)
+
+# Lire le shapefile
+epci_data <- st_read("h://Desktop//Communes françaises")
+
+epci_data <- st_transform(epci_data, crs = 2154)
+
+# Tracer la carte
+ggplot(data = epci_data) +
+  geom_sf() +  
+  theme_minimal() +
+  labs(title = "Carte des EPCI en France",
+       fill = "Communauté")
+```
+
